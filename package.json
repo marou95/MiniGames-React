@@ -1,5 +1,5 @@
 {
-  "name": "saint-valentin",
+  "name": "mini-games",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-spring/parallax": "^10.0.1",
+    "@tailwindcss/vite": "^4.1.10",
     "crypto-js": "^4.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -32,6 +33,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.2.0",
+    "tailwindcss": "^4.1.10",
     "vite": "^6.3.5"
   }
 }
