@@ -82,14 +82,13 @@ const GlitchText = styled.h1`
 const Input = styled.input`
   padding: 15px;
   font-size: 1.5rem;
-  width: 320px;
+  width: 380px;
   border: 2px solid #0f0;
   background: transparent;
   color: #0f0;
   border-radius: 5px;
   text-align: center;
   outline: none;
-  margin-bottom: 20px;
   font-family: 'Courier New', Courier, monospace;
   position: relative;
   z-index: 1;
@@ -208,6 +207,7 @@ const AccessCode = () => {
             onChange={(e) => setCode(e.target.value)}
             placeholder="Enter the secret code..."
             autoFocus
+            background="black"
           />
         </form>
       ) : (

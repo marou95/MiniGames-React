@@ -1,26 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import "tailwindcss";
 
 body {
+  background: none;
   margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-  color: #333;
-
-}
-.swiper {
-  width: 100%;
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding: 0;
+  min-height: 100vh;
 }
 
-.swiper-slide {
-  background-position: center;
-  background-size: cover;
-  width: 300px;
-  height: 300px;
-}
-
-.swiper-slide-active {
-  transform: scale(1.2);
-  transition: all 0.3s;
-}
