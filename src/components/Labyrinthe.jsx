@@ -104,10 +104,9 @@ const Labyrinthe = ({ onComplete, onNext, letters, gameName, completed }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-[linear-gradient(to_bottom,rgba(17,24,39,0.9),rgba(55,65,81,0.9))] bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Cpath d=%22M0 100 L100 0%22 stroke=%22rgba(255,255,255,0.05)%22 stroke-width=%221%22/%3E%3C/svg%3E')] bg-[length:100px_100px] font-mono">
-      {/* Titre */}
-      <h2 className="text-4xl font-extrabold text-white mt-12 mb-8 font-mono">
-        Mini-Games Adventure: {gameName}
+<div className="flex flex-col items-center justify-center min-h-screen w-full bg-[radial-gradient(circle_at_center,rgba(17,24,39,0.9)_0%,rgba(55,65,81,0.9)_100%)] font-mono">      {/* Titre */}
+      <h2 className="text-2xl font-bold font-stretch-expanded leading-none  text-white md:text-2xl lg:text-2xl mb-6 p-4 ">
+        🏃🏻‍♂️ {gameName} 🏃🏻‍♂️
       </h2>
       <div className="bg-gray-900 border-4 border-gray-700 rounded-xl p-6 w-full max-w-md mx-auto flex flex-col items-center">
         <p className="text-gray-300 mb-4">Movements: {moveCount}</p>
@@ -118,13 +117,13 @@ const Labyrinthe = ({ onComplete, onNext, letters, gameName, completed }) => {
                 {row.map((cell, x) => (
                   <div
                     key={x}
-                    className={`w-[28px] h-[28px] md:w-[20px] md:h-[20px] border border-gray-700 relative ${
+                    className={`w-[20px] h-[20px] md:w-[20px] md:h-[20px]  border border-gray-700 relative ${
                       cell === 1 ? 'bg-gray-600' : cell === 3 ? 'bg-gray-300' : 'bg-gray-800'
                     }`}
                   >
                     {playerPosition.x === x && playerPosition.y === y && (
                       <div
-                        className="w-[20px] h-[20px] md:w-[14px] md:h-[14px] bg-blue-600 rounded-full absolute top-1 left-1 animate-bounce"
+                        className="w-[10px] h-[10px] md:w-[12px] md:h-[12px] bg-blue-600 rounded-full absolute top-1 left-1 animate-bounce"
                       />
                     )}
                   </div>
@@ -133,10 +132,10 @@ const Labyrinthe = ({ onComplete, onNext, letters, gameName, completed }) => {
             ))}
           </div>
         </div>
-        <div className="mt-4 flex flex-col items-center">
+        <div className="mt-2 flex flex-col items-center">
           <button
             onClick={() => handleButtonClick('up')}
-            className="bg-gray-800 text-white px-4 py-2 m-1 rounded-md hover:bg-gray-700 transition-all duration-200"
+            className="bg-gray-800 text-white px-4 py-1 rounded-md hover:bg-gray-700 transition-all duration-200"
           >
             ↑
           </button>
@@ -156,7 +155,7 @@ const Labyrinthe = ({ onComplete, onNext, letters, gameName, completed }) => {
           </div>
           <button
             onClick={() => handleButtonClick('down')}
-            className="bg-gray-800 text-white px-4 py-2 m-1 rounded-md hover:bg-gray-700 transition-all duration-200"
+            className="bg-gray-800 text-white px-4 py-1 rounded-md hover:bg-gray-700 transition-all duration-200"
           >
             ↓
           </button>

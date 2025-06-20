@@ -41,9 +41,8 @@ const MemoryGame = ({ onComplete, onNext, letters, gameName, completed }) => {
   }, [matched, shuffledCards, onComplete]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-[linear-gradient(to_bottom,rgba(31,41,55,0.9),rgba(75,85,99,0.9))] bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22 viewBox=%220 0 50 50%22%3E%3Ccircle cx=%2225%22 cy=%2225%22 r=%221%22 fill=%22rgba(255,255,255,0.05)%22/%3E%3C/svg%3E')] bg-[length:50px_50px] font-mono">
-      <h2 className="text-4xl font-extrabold text-white mt-12 mb-8 font-mono">
-        Mini-Games Adventure: {gameName}
+<div className="flex flex-col items-center justify-center min-h-screen w-full bg-[radial-gradient(circle_at_center,rgba(17,24,39,0.9)_0%,rgba(55,65,81,0.9)_100%)] font-mono">      <h2 className="text-2xl font-bold font-stretch-expanded leading-none  text-white md:text-2xl lg:text-2xl mb-6 p-4 ">
+       🧩 {gameName} 🧩
       </h2>
       <div className="bg-gray-900 border-4 border-gray-700 rounded-xl p-6 w-full max-w-md mx-auto flex flex-col items-center">
         <div className="grid grid-cols-4 gap-2 justify-center mb-4">

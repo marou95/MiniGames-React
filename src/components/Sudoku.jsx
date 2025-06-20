@@ -78,8 +78,8 @@ const Sudoku = ({ onComplete, onNext, letters, gameName, completed }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full bg-[linear-gradient(to_bottom,rgba(0,0,0,1),rgba(0,20,0,0.9))] bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22%3E%3Ctext x=%220%22 y=%2215%22 font-size=%2212%22 fill=%22rgba(0,255,0,0.05)%22 font-family=%22monospace%22%3E01%3C/text%3E%3C/svg%3E')] bg-[length:20px_20px] font-mono">
       {/* Titre */}
-      <h2 className="text-4xl font-extrabold text-white mt-12 mb-8 font-mono">
-        Mini-Games Adventure: {gameName}
+      <h2 className="text-2xl font-bold font-stretch-expanded leading-none  text-white md:text-2xl lg:text-2xl mb-6 p-4 ">
+        🔢 {gameName} 🔢
       </h2>
       <div className="bg-black border-4 border-green-700 rounded-xl p-8 w-full max-w-md mx-auto flex justify-center" style={{ boxShadow: '0 0 10px rgba(0,255,0,0.3)' }}>
         <div className="flex flex-col items-center border-2 border-green-800 p-2 rounded">
@@ -94,9 +94,8 @@ const Sudoku = ({ onComplete, onNext, letters, gameName, completed }) => {
                   max="4"
                   value={cell || ''}
                   onChange={(e) => handleChange(rowIndex, colIndex, e.target.value)}
-                  className={`w-10 h-10 text-center border border-green-800 text-lg font-mono ${
-                    initialGrid[rowIndex][colIndex] ? 'bg-gray-900 text-green-400 cursor-not-allowed' : 'bg-black text-green-500'
-                  } focus:outline-none focus:ring-2 focus:ring-green-600 rounded-sm disabled:opacity-50`}
+                  className={`w-10 h-10 text-center border border-green-800 text-lg font-mono ${initialGrid[rowIndex][colIndex] ? 'bg-gray-900 text-green-400 cursor-not-allowed' : 'bg-black text-green-500'
+                    } focus:outline-none focus:ring-2 focus:ring-green-600 rounded-sm disabled:opacity-50`}
                   disabled={initialGrid[rowIndex][colIndex] !== null}
                 />
               ))}
@@ -113,9 +112,8 @@ const Sudoku = ({ onComplete, onNext, letters, gameName, completed }) => {
         )}
         <button
           onClick={onNext}
-          className={`px-6 py-3 bg-black text-green-500 border border-green-700 rounded-lg font-semibold transition-all duration-200 font-mono ${
-            completed ? 'hover:bg-green-900 hover:text-green-300' : 'opacity-50 cursor-not-allowed'
-          }`}
+          className={`px-6 py-3 bg-black text-green-500 border border-green-700 rounded-lg font-semibold transition-all duration-200 font-mono ${completed ? 'hover:bg-green-900 hover:text-green-300' : 'opacity-50 cursor-not-allowed'
+            }`}
           disabled={!completed}
         >
           Next

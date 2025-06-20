@@ -12,13 +12,29 @@ const BombDefusal = ({ onComplete, onNext, letters, gameName, completed }) => {
   };
   const [wires, setWires] = useState([]);
   const [cutWires, setCutWires] = useState([]);
-  const [timeLeft, setTimeLeft] = useState(60000); // 90 seconds in milliseconds
+  const [timeLeft, setTimeLeft] = useState(60000); // 60 seconds in milliseconds
   const [gameState, setGameState] = useState('playing'); // 'playing', 'won', 'lost'
-  const [attempts, setAttempts] = useState(0);
+  const [serialNumber, setSerialNumber] = useState('');
+  const [isCompleted, setIsCompleted] = useState(false); // État pour bouton Next
+
+  // Générer un numéro de série aléatoire (longueur 3–8, dernier caractère un chiffre)
+  const generateSerialNumber = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const digits = '0123456789';
+    const length = Math.floor(Math.random() * 6) + 3; // 3 à 8
+    let result = '';
+    for (let i = 0; i < length - 1; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    // Dernier caractère est un chiffre
+    result += digits.charAt(Math.floor(Math.random() * digits.length));
+    console.log('Generated serial:', result, 'Length:', result.length, 'Parity:', result.length % 2 === 0 ? 'even' : 'odd'); // Debug
+    return result;
+  };
 
   // Générer des fils aléatoires
   const initializeWires = () => {
-    const numWires = Math.floor(Math.random() * 5) + 2; // 2 à 6
+    const numWires = [3, 4, 5, 6][Math.floor(Math.random() * 4)]; // 3 à 6 fils
     const newWires = Array.from({ length: numWires }, () =>
       colors[Math.floor(Math.random() * colors.length)]
     );
@@ -27,7 +43,8 @@ const BombDefusal = ({ onComplete, onNext, letters, gameName, completed }) => {
     setCutWires([]);
     setTimeLeft(60000);
     setGameState('playing');
-    setAttempts((prev) => prev + 1);
+    setIsCompleted(false); // Désactiver bouton Next
+    setSerialNumber(generateSerialNumber());
   };
 
   // Initialiser au montage
@@ -49,7 +66,7 @@ const BombDefusal = ({ onComplete, onNext, letters, gameName, completed }) => {
       });
     }, 10); // Update every 10ms
     return () => clearInterval(timer);
-  }, [gameState, timeLeft, attempts]);
+  }, [gameState, timeLeft]);
 
   // Formater le temps en hh:mm:ss:ms
   const formatTime = (ms) => {
@@ -60,54 +77,88 @@ const BombDefusal = ({ onComplete, onNext, letters, gameName, completed }) => {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${milliseconds.toString().padStart(3, '0')}`;
   };
 
-  // Évaluer la règle à appliquer
+  // Compter les fils par couleur
+  const getWireCounts = () => {
+    return wires.reduce((acc, color) => ({ ...acc, [color]: (acc[color] || 0) + 1 }), {});
+  };
+
+  // Vérifier si la longueur du numéro de série est impaire
+  const isSerialLengthOdd = () => {
+    return serialNumber.length % 2 === 1; // True si longueur impaire (3, 5, 7)
+  };
+
+  // Déterminer le fil à couper
   const getNextWireToCut = () => {
-    if (!wires || !wires.length) {
-      console.log('No wires available'); // Débogage
+    if (!wires.length || cutWires.length > 0) {
+      console.log('No wires to cut or already cut'); // Débogage
       return -1;
     }
-    const wireCounts = wires.reduce(
-      (acc, color) => ({ ...acc, [color]: (acc[color] || 0) + 1 }),
-      {}
-    );
+    const wireCounts = getWireCounts();
     const totalWires = wires.length;
+    const lastWireIndex = totalWires - 1;
 
-    console.log('Wire counts:', wireCounts, 'Total wires:', totalWires, 'Cut wires:', cutWires); // Débogage
+    console.log('Evaluating rules:', { wireCounts, totalWires, serialLength: serialNumber.length }); // Débogage
 
-    // Règle 1: Si exactement deux fils rouges, couper les deux fils rouges dans l’ordre
-    if (wireCounts.red === 2) {
-      const redIndices = wires
-        .map((color, i) => (color === 'red' ? i : -1))
-        .filter((i) => i !== -1);
-      const nextRedIndex = redIndices.find((i) => !cutWires.includes(i));
-      if (nextRedIndex !== undefined) {
-        console.log('Rule 1 applied: Cut red wire at', nextRedIndex);
-        return nextRedIndex;
+    if (totalWires === 3) {
+      if (isSerialLengthOdd()) {
+        const blueIndex = wires.indexOf('blue');
+        if (blueIndex !== -1) {
+          console.log('3 wires, Rule 1: Serial odd, cut first blue wire');
+          return blueIndex;
+        }
       }
-    }
-
-    // Règle 2: S’il y a un fil bleu, couper le premier fil bleu
-    if (wireCounts.blue > 0) {
-      const firstBlueIndex = wires.findIndex((color) => color === 'blue');
-      if (firstBlueIndex !== -1 && !cutWires.includes(firstBlueIndex)) {
-        console.log('Rule 2 applied: Cut first blue wire at', firstBlueIndex);
-        return firstBlueIndex;
+      if (!wireCounts.red) {
+        console.log('3 wires, Rule 2: No red, cut second wire');
+        return 1;
       }
+      console.log('3 wires, Rule 3: Default, cut last wire');
+      return lastWireIndex;
     }
 
-    // Règle 3: Si nombre total de fils impair, couper le 3e fil
-    if (totalWires % 2 === 1 && totalWires >= 3 && !cutWires.includes(2)) {
-      console.log('Rule 3 applied: Cut third wire at 2');
-      return 2;
-    }
-
-    // Règle 4: Par défaut, couper le 1er fil
-    if (!cutWires.includes(0)) {
-      console.log('Rule 4 applied: Cut first wire at 0');
+    if (totalWires === 4) {
+      if (!isSerialLengthOdd() && wireCounts.red > 1) {
+        const lastRedIndex = wires.lastIndexOf('red');
+        console.log('4 wires, Rule 1: Serial even and >1 red, cut last red wire');
+        return lastRedIndex;
+      }
+      if (wireCounts.yellow > 0) {
+        const yellowIndex = wires.indexOf('yellow');
+        console.log('4 wires, Rule 2: Yellow exists, cut first yellow wire');
+        return yellowIndex;
+      }
+      console.log('4 wires, Rule 3: Default, cut first wire');
       return 0;
     }
 
-    console.log('No more wires to cut');
+    if (totalWires === 5) {
+      if (isSerialLengthOdd() && wires[lastWireIndex] === 'black') {
+        console.log('5 wires, Rule 1: Serial odd and last black, cut second wire');
+        return 1;
+      }
+      if (wireCounts.green > 1) {
+        const lastGreenIndex = wires.lastIndexOf('green');
+        console.log('5 wires, Rule 2: >1 green, cut last green wire');
+        return lastGreenIndex;
+      }
+      console.log('5 wires, Rule 3: Default, cut third wire');
+      return 2;
+    }
+
+    if (totalWires === 6) {
+      if (!isSerialLengthOdd() && !wireCounts.white) {
+        console.log('6 wires, Rule 1: Serial even and no white, cut fourth wire');
+        return 3;
+      }
+      if (wireCounts.blue > 1) {
+        const blueIndex = wires.indexOf('blue');
+        console.log('6 wires, Rule 2: >1 blue, cut first blue wire');
+        return blueIndex;
+      }
+      console.log('6 wires, Rule 3: Default, cut last wire');
+      return lastWireIndex;
+    }
+
+    console.log('No rule matched');
     return -1;
   };
 
@@ -124,21 +175,9 @@ const BombDefusal = ({ onComplete, onNext, letters, gameName, completed }) => {
       const newCutWires = [...cutWires, index];
       setCutWires(newCutWires);
       console.log('Correct cut, new cutWires:', newCutWires);
-
-      // Vérifier si victoire
-      const wireCounts = wires.reduce(
-        (acc, color) => ({ ...acc, [color]: (acc[color] || 0) + 1 }),
-        {}
-      );
-      const isRule1Active = wireCounts.red === 2;
-      const isRule1Complete = isRule1Active && newCutWires.length === 2;
-      const isOtherRuleComplete = !isRule1Active && newCutWires.length === 1;
-
-      if (isRule1Complete || isOtherRuleComplete) {
-        console.log('Victory: All required wires cut');
-        setGameState('won');
-        onComplete();
-      }
+      setGameState('won');
+      setIsCompleted(true); // Activer bouton Next
+      onComplete('Q'); // Passer la lettre 'Q'
     } else {
       console.log('Explosion: Incorrect wire cut');
       setGameState('lost');
@@ -151,36 +190,39 @@ const BombDefusal = ({ onComplete, onNext, letters, gameName, completed }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-[radial-gradient(circle_at_center,rgba(03,10,19,0.7)_0%,#0a0a0a_70%)] font-mono">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-[radial-gradient(circle_at_center,rgba(17,24,39,0.9)_0%,rgba(55,65,81,0.9)_100%)] font-mono">
       {/* Titre */}
-      <h2 className="text-l font-bold leading-none tracking-tight text-white md:text-2xl lg:text-2xl mb-6 p-10">
-        {/* mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900  dark:text-white */}
-        Mini-Games Adventure : {gameName}
+      <h2 className="text-2xl font-bold font-stretch-expanded leading-none text-white md:text-2xl lg:text-2xl mb-6 p-4">
+        💣 {gameName} 💣
       </h2>
       <div className="w-full md:w-full lg:w-full max-w-[90%] sm:max-w-2xl">
         {/* Boîtier de la bombe */}
-        <div className={`bg-gradient-to-br from-gray-700 to-gray-900 border-4 border-gray-600 rounded-xl p-8 w-full max-w-md relative mx-auto ${gameState === 'lost' ? 'animate-shake' : ''
-          }`}>
+        <div className={`bg-gradient-to-br from-gray-700 to-gray-900 border-4 border-gray-600 rounded-xl p-8 w-full max-w-md relative mx-auto ${gameState === 'lost' ? 'animate-shake' : ''}`}>
           {/* Vis aux coins */}
           <div className="absolute top-2 left-2 w-2 h-2 bg-gray-500 rounded-full"></div>
           <div className="absolute top-2 right-2 w-2 h-2 bg-gray-500 rounded-full"></div>
           <div className="absolute bottom-2 left-2 w-2 h-2 bg-gray-500 rounded-full"></div>
           <div className="absolute bottom-2 right-2 w-2 h-2 bg-gray-500 rounded-full"></div>
 
+          {/* Numéro de série */}
+          <div className="bg-gray-800 text-gray-300 font-mono text-lg p-2 rounded border border-gray-600 mb-4">
+            Serial: {serialNumber}
+          </div>
+
           {/* Timer à 7 segments */}
-          <div className={`bg-gray-900 text-red-600 font-mono text-2xl p-2 rounded border border-gray-600 mb-4 ${timeLeft <= 10000 ? 'animate-pulse' : 'animate-blink'
-            }`}>
+          <div className={`bg-gray-900 text-red-600 font-mono text-2xl p-2 rounded border border-gray-600 mb-4 ${timeLeft <= 10000 ? 'animate-pulse' : 'animate-blink'}`}>
             {formatTime(timeLeft)}
           </div>
 
           {/* Règles */}
           <div className="mb-6 bg-gray-700 text-gray-300 p-4 rounded-lg">
             <h3 className="text-lg font-semibold text-gray-100 mb-2">Defusal Rules:</h3>
-            <ol className="list-decimal pl-5 text-sm space-y-1">
-              <li>If exactly two red wires exist, cut both red wires in order (first, then second).</li>
-              <li>If there is a blue wire, cut the first blue wire.</li>
-              <li>If the total number of wires is odd, cut the third wire (if it exists).</li>
-              <li>Otherwise, cut the first wire.</li>
+            <p className="mb-2 text-sm">Check if serial number length is odd (3,5,7) or even (4,6,8).</p>
+            <ol className="list-decimal pl-5 text-xs space-y-1">
+              <li><strong>3 Wires:</strong> Odd serial → cut first blue if exists. No red → cut 2nd. Else, cut last.</li>
+              <li><strong>4 Wires:</strong> Even serial & >1 red → cut last red. Yellow exists → cut first yellow. Else, cut 1st.</li>
+              <li><strong>5 Wires:</strong> Odd serial & last black → cut 2nd. >1 green → cut last green. Else, cut 3rd.</li>
+              <li><strong>6 Wires:</strong> Even serial & no white → cut 4th. >1 blue → cut first blue. Else, cut last.</li>
             </ol>
           </div>
 
@@ -193,9 +235,7 @@ const BombDefusal = ({ onComplete, onNext, letters, gameName, completed }) => {
                 <button
                   key={index}
                   onClick={() => handleCut(index)}
-                  className={`w-full max-w-[calc(100%-2rem)] h-4 ${colorClasses[color]} ${cutWires.includes(index) ? 'opacity-30 cursor-not-allowed' : 'hover:shadow-[0_0_8px_rgba(255,0,0,0.6)]'
-                    } transition-all duration-200 flex items-center justify-between pl-2 pr-4 text-sm ${color === 'white' ? 'text-gray-900' : 'text-white'
-                    } font-bold rounded bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(0,0,0,0.2)_2px,rgba(0,0,0,0.2)_4px)]`}
+                  className={`w-full max-w-[calc(100%-2rem)] h-4 ${colorClasses[color]} ${cutWires.includes(index) ? 'opacity-30 cursor-not-allowed' : 'hover:shadow-[0_0_8px_rgba(255,0,0,0.6)]'} transition-all duration-200 flex items-center justify-between pl-2 pr-4 text-sm ${color === 'white' ? 'text-gray-900' : 'text-white'} font-bold rounded bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(0,0,0,0.2)_2px,rgba(0,0,0,0.2)_4px)]`}
                   disabled={cutWires.includes(index) || gameState !== 'playing' || !wires}
                   title={`Wire ${index + 1}: ${color.charAt(0).toUpperCase() + color.slice(1)}`}
                 >
@@ -229,14 +269,13 @@ const BombDefusal = ({ onComplete, onNext, letters, gameName, completed }) => {
         <div className="mt-6 flex flex-col items-center">
           {letters && letters.length > 0 && (
             <h3 className="text-xl text-gray-300 mb-4">
-              Letters obtained: {letters.join("")}
+              Letters obtained: {letters.join('')}
             </h3>
           )}
           <button
             onClick={onNext}
-            className={`px-6 py-3 mb-10 bg-gray-900 text-white rounded-lg font-semibold transition-all duration-200 ${completed ? 'hover:bg-blue-600' : 'opacity-50 cursor-not-allowed'
-              }`}
-            disabled={!completed}
+            className={`px-6 py-3 mb-10 bg-gray-900 text-white rounded-lg font-semibold transition-all duration-200 ${isCompleted ? 'hover:bg-blue-600' : 'opacity-50 cursor-not-allowed'}`}
+            disabled={!isCompleted}
           >
             Next
           </button>
