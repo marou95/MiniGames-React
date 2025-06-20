@@ -3,7 +3,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AccessCode from './components/AccessCode';
 import Game from './components/Game';
 import RealAccessCode from './components/RealAccessCode';
-import Carousel from './components/ImageCarousel';
+import VictoryPage from './components/VictoryPage';
 
 const App = () => (
   <BrowserRouter>
@@ -26,10 +26,10 @@ const App = () => (
         }
       />
       <Route
-        path="/carousel"
+        path="/victory"
         element={
           <ProtectedRoute requireFinalCode>
-            <Carousel />
+            <VictoryPage />
           </ProtectedRoute>
         }
       />        

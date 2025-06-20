@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BombDefusal from './BombDefusal';
-import Sudoku from './Sudoku';
-import Labyrinthe from './Labyrinthe';
-import MemoryGame from './MemoryGame';
-import Cryptogramme from './Cryptogramme';
+import BombDefusal from './games/BombDefusal';
+import Sudoku from './games/Sudoku';
+import Labyrinthe from './games/Labyrinthe';
+import MemoryGame from './games/MemoryGame';
+import Cryptogramme from './games/Cryptogramme';
 
 const Game = () => {
   const navigate = useNavigate();
@@ -22,10 +22,10 @@ const Game = () => {
   });
 
   const games = [
-    { component: Sudoku, name: 'Sudoku', letter: 'Q' },
-    { component: Labyrinthe, name: 'Maze Challenge', letter: 'U' },
+    // { component: Sudoku, name: 'Sudoku', letter: 'Q' },
+    // { component: Labyrinthe, name: 'Maze Challenge', letter: 'U' },
     // { component: MemoryGame, name: 'Memory Challenge', letter:'E' },
-    { component: Cryptogramme, name: 'Cipher Challenge', letter: 'S' },
+    // { component: Cryptogramme, name: 'Cipher Challenge', letter: 'S' },
     { component: BombDefusal, name: 'Bomb Defusal', letter: 'T' },
 
   ];

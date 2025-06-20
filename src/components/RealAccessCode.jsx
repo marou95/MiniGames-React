@@ -77,10 +77,10 @@ const AccessCode = () => {
     e.preventDefault();
     if (code.toUpperCase() === 'QUEST') {
       localStorage.setItem('isAuthenticatedFinalCode', 'true');
-      navigate('/carousel');
-      setTimeout(() => {
-      localStorage.clear(); // On vide le localStorage  après la redirection
-    }, 1000); // 1s
+      navigate('/victory');
+    //   setTimeout(() => {
+    //   localStorage.clear(); // On vide le localStorage  après la redirection
+    // }, 1000); // 1s
     } else {
       alert('Incorrect code!');
     }
