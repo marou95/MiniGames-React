@@ -22,10 +22,10 @@ const Game = () => {
   });
 
   const games = [
-    // { component: Sudoku, name: 'Sudoku', letter: 'Q' },
-    // { component: Labyrinthe, name: 'Maze Challenge', letter: 'U' },
-    // { component: MemoryGame, name: 'Memory Challenge', letter:'E' },
-    // { component: Cryptogramme, name: 'Cipher Challenge', letter: 'S' },
+    { component: Sudoku, name: 'Sudoku', letter: 'Q' },
+    { component: Labyrinthe, name: 'Maze Challenge', letter: 'U' },
+    { component: MemoryGame, name: 'Memory Challenge', letter:'E' },
+    { component: Cryptogramme, name: 'Cipher Challenge', letter: 'S' },
     { component: BombDefusal, name: 'Bomb Defusal', letter: 'T' },
 
   ];
