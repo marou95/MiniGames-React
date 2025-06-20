@@ -154,7 +154,8 @@ const AccessCode = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (code === 'ENTER THE MATRIX') {
+    if (code.toUpperCase() === 'ENTER THE MATRIX') {
+      localStorage.setItem('isAuthenticated', 'true');
       setHacked(true);
       setTimeout(() => {
         navigate('/game');
@@ -164,7 +165,6 @@ const AccessCode = () => {
     }
   };
 
-  // Utilisation de useMemo pour mémoriser les mots flottants
   const floatingWords = useMemo(() => {
     return [...Array(10)].map((_, i) => (
       <FloatingWords key={i} left={Math.random() * 100} top={Math.random() * 100}>
@@ -191,14 +191,13 @@ const AccessCode = () => {
           'FEDERATED_LEARNING_SECURITY'
         ][i % 20]}
       </FloatingWords>
-
     ));
   }, []);
 
   return (
     <Container>
       {floatingWords}
-      <MorseCode>· -· - · ·-· / - ···· · / -- ·- - ·-· ·· -··-</MorseCode>
+      <MorseCode>. -. - . .-. / - .... . / -- .- - .-. .. -..-</MorseCode>
       {!hacked ? (
         <form onSubmit={handleSubmit}>
           <Input
@@ -207,7 +206,6 @@ const AccessCode = () => {
             onChange={(e) => setCode(e.target.value)}
             placeholder="Enter the secret code..."
             autoFocus
-            background="black"
           />
         </form>
       ) : (
