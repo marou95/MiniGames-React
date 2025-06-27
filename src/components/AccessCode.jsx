@@ -128,12 +128,12 @@ const AccessCode = () => {
     if (canPlay) {
       const ambience = new Audio(ambienceMusic);
       ambience.loop = true;
-      ambience.volume = 0.5;
+      ambience.volume = 0.1;
       ambience.play();
 
       const morse = new Audio(morseSound);
       morse.loop = true;
-      morse.volume = 0.3;
+      morse.volume = 0.01;
       morse.play();
 
       return () => {
