@@ -148,6 +148,7 @@ const AccessCode = () => {
   useEffect(() => {
     if (hacked) {
       const audio = new Audio(hackingSound);
+      audio.volume = 0.15;
       audio.play();
     }
   }, [hacked]);
