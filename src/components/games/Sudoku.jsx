@@ -4,15 +4,15 @@ import { useState } from 'react';
 const Sudoku = ({ onComplete, onNext, letters, gameName, completed }) => {
   // Grille initiale 9x9 (environ 40% de cases remplies pour une difficulté élevée)
   const initialGrid = [
-    [5, 3, null, null, 7, null, null, null, null],
-    [6, null, null, 1, 9, 5, null, null, null],
-    [null, 9, 8, null, null, null, null, 6, null],
-    [8, null, null, null, 6, null, null, null, 3],
-    [4, null, null, 8, null, 3, null, null, 1],
-    [7, null, null, null, 2, null, null, null, 6],
-    [null, 6, null, null, null, null, 2, 8, null],
-    [null, null, null, 4, 1, 9, null, null, 5],
-    [null, null, null, null, 8, null, null, 7, 9],
+    [7, null, null, 1, null, 4, 3, null, 6],
+    [1, null, null, 5, null, null, null, null, null],
+    [null, null, null, null, null, 2, null, null, 5],
+    [null, null, 6, 3, 7, null, 1, null, 2],
+    [null, null, null, null, null, null, null, null, null],
+    [3, 8, null, null, null, null, null, null, null],
+    [4, null, 1, null, null, null, null, 2, null],
+    [null, null, null, null, 6, null, null, null, null],
+    [null, 3, null, 8, null, 1, null, 4, null],
   ];
 
   const [grid, setGrid] = useState(initialGrid);
@@ -86,11 +86,14 @@ const Sudoku = ({ onComplete, onNext, letters, gameName, completed }) => {
       <h2 className="text-xl font-bold font-stretch-expanded leading-none text-white mb-4 p-4 sm:text-2xl">
         🔢 {gameName} 🔢
       </h2>
-      <div className="bg-black border-4 border-green-700 rounded-xl p-4 w-full max-w-[90%] mx-auto flex justify-center" style={{ boxShadow: '0 0 10px rgba(0,255,0,0.3)' }}>
-        <div className="flex flex-col items-center border-2 border-green-800 p-2 rounded">
+      <div className="bg-black border-2 border-green-700 rounded-xl p-4 w-full max-w-[95%] mx-auto flex justify-center" style={{ boxShadow: '0 0 10px rgba(0,255,0,0.3)' }}>
+        <div className="flex flex-col items-center border-green-800 p-2 rounded">
           {error && <p className="text-base text-green-300 mb-2">{error}</p>}
           {grid.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex justify-center">
+            <div
+              key={rowIndex}
+              className={`flex justify-center ${rowIndex === 2 || rowIndex === 5 ? 'mb-2' : 'mb-0.5'}`}
+            >
               {row.map((cell, colIndex) => (
                 <input
                   key={colIndex}
@@ -101,7 +104,9 @@ const Sudoku = ({ onComplete, onNext, letters, gameName, completed }) => {
                   onChange={(e) => handleChange(rowIndex, colIndex, e.target.value)}
                   className={`w-8 h-8 text-center border border-green-800 text-base font-mono sm:w-9 sm:h-9 sm:text-lg ${
                     initialGrid[rowIndex][colIndex] ? 'bg-gray-900 text-green-400 cursor-not-allowed' : 'bg-black text-green-500'
-                  } focus:outline-none focus:ring-2 focus:ring-green-600 rounded-sm disabled:opacity-50`}
+                  } focus:outline-none focus:ring-2 focus:ring-green-600 rounded-sm disabled:opacity-50 ${
+                    colIndex === 2 || colIndex === 5 ? 'mr-2' : 'mr-0.5'
+                  }`}
                   disabled={initialGrid[rowIndex][colIndex] !== null}
                 />
               ))}
