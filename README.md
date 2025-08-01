@@ -1,26 +1,28 @@
-# 🕹️ Interactive Puzzle Game
+# 🕹️ BreakTheCode
 
-A small web game featuring multiple challenges, designed to progressively unlock content. Solve puzzles, navigate a maze, and complete tasks to access the final surprise.
+A web-based puzzle game featuring a series of interactive challenges designed to progressively unlock a final reward. Solve riddles, navigate mazes, and crack codes in an immersive, high-tech environment.
 
-## 🎮 Features
+## 🌐 Demo
 
-- **Mini-games**: Riddles, Sudoku, Memory, Cryptogram, and a Maze challenge.
-- **Progressive Unlock**: Completing each game reveals part of the final reward.
-- **Immersive Design**: Subtle animations and sound effects enhance the experience.
+Test the game live at: [https://marou-breakthecode.netlify.app/](https://marou-breakthecode.netlify.app/)
+
+## 🎮 Key Features
+
+- **Mini-Games**: Engaging challenges including a Sudoku, Cryptogram, Memory, Maze, and Bomb Defusal.
+- **Progressive Unlock System**: Completing each game collects letters stored in `localStorage`, unlocking a final victory page with confetti animations.
+- **Protected Routes**: Secured navigation using `react-router-dom` to control access to game stages and the victory page.
+- **Code Obfuscation**: Production builds use `vite-plugin-javascript-obfuscator` to protect client-side logic.
+- **Mobile Optimization**: Responsive design optimized for small screens with compact layouts.
+- **Local Storage Management**: Persistent game state to maintain progress across sessions.
+- **Styling Evolution**: Initially built with Styled-Components for modular CSS, later transitioned to TailwindCSS.
+- **Immersive Design**: High-tech aesthetic with neon green accents, subtle animations (e.g., trophy bounce, confetti), and a dark background.
 
 ## 🛠️ Tech Stack
 
-- **React** – Frontend framework.
-- **Styled-components** – Component-based styling.
-- **React Router** – Page navigation.
-- **Netlify** – Deployment.
-
-## 🚀 Run Locally
-
-### Prerequisites
-- Node.js and npm installed.
-
-### Steps
-1. Clone the repository:
-   ```bash
-   git clone <repo-url>
+- **React** – Frontend framework for dynamic UI.
+- **Styled-Components** – Initial component-based styling for modular CSS.
+- **TailwindCSS** – Later adopted for utility-first styling and responsive design.
+- **React Router** – Client-side routing for game navigation.
+- **Vite** – Fast build tool with HMR and obfuscation.
+- **react-confetti** – Victory page animations.
+- **Netlify Deployment**
